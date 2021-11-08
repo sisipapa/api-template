@@ -1,12 +1,13 @@
 package com.sisipapa.template.api.entity;
 
+import com.sisipapa.template.api.cenum.SchoolType;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
 
-enum SchoolType {ELEMANTARY, MIDDLE, HIGH}
+
 
 @Getter
 @Setter
