@@ -13,6 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.sisipapa.template.api.entity.QStudent.student;
 
@@ -41,6 +43,13 @@ public class TestRepository {
         student2.setSchoolType(SchoolType.MIDDLE);
         em.persist(student2);
 
+        Student student4 = new Student();
+        student4.setAge(16);
+        student4.setName("중딩2");
+        student4.setPhoneNumber("010-2222-2221");
+        student4.setSchoolType(SchoolType.MIDDLE);
+        em.persist(student4);
+
         Student student3 = new Student();
         student3.setAge(18);
         student3.setName("고딩1");
@@ -54,8 +63,12 @@ public class TestRepository {
     void query1(){
         List<Student> students = jpaQueryFactory
                 .selectFrom(student)
+                .where(student.age.between(15,20).and(student.name.contains("중딩")))
                 .fetch();
 
-        students.forEach(System.out::println);
+        students.forEach(student -> System.out.println(student.getName()));
+
+        Map<SchoolType, List<Student>> result = students.stream()
+                .collect(Collectors.groupingBy(Student::getSchoolType));
     }
 }
