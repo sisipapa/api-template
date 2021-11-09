@@ -2,9 +2,7 @@ package com.sisipapa.template.api.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sisipapa.template.api.cenum.SchoolType;
-import com.sisipapa.template.api.entity.QStudent;
 import com.sisipapa.template.api.entity.Student;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +10,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
 import static com.sisipapa.template.api.entity.QStudent.student;
+import static java.util.stream.Collectors.*;
 
 @SpringBootTest
 public class TestRepository {
@@ -67,8 +64,35 @@ public class TestRepository {
                 .fetch();
 
         students.forEach(student -> System.out.println(student.getName()));
-
+        
+        // 단일필드 그룹화
         Map<SchoolType, List<Student>> result = students.stream()
-                .collect(Collectors.groupingBy(Student::getSchoolType));
+                .collect(groupingBy(Student::getSchoolType));
+        System.out.println(result);
+        
+        // 다중필드 그룹화
+        Map<SchoolType, Map<String, List<Student>>> result2 = students.stream()
+                .collect(groupingBy(Student::getSchoolType, groupingBy(Student::getName)));
+        System.out.println(result2);
+
+        // 그룹별 카운트
+        Map<SchoolType, Long> result3 = students.stream()
+                .collect(groupingBy(Student::getSchoolType, counting()));
+        System.out.println(result3);
+
+        // 그룹별 평균
+        Map<SchoolType, Double> result4 = students.stream()
+                .collect(groupingBy(Student::getSchoolType, averagingDouble(Student::getAge)));
+        System.out.println(result4);
+
+        // 그룹별 최대값
+        Map<SchoolType, Optional<Student>> result5 = students.stream()
+                .collect(groupingBy(Student::getSchoolType, maxBy(Comparator.comparingInt(Student::getAge))));
+        System.out.println(result5);
+
+        // 그룹화 요약
+        Map<SchoolType, IntSummaryStatistics> result6 = students.stream()
+                .collect(groupingBy(Student::getSchoolType, summarizingInt(Student::getAge)));
+        System.out.println(result6);
     }
 }
