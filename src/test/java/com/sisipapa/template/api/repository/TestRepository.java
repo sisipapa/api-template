@@ -2,6 +2,7 @@ package com.sisipapa.template.api.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sisipapa.template.api.cenum.SchoolType;
+import com.sisipapa.template.api.dto.StudentDto;
 import com.sisipapa.template.api.entity.Student;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.sisipapa.template.api.entity.QStudent.student;
 import static java.util.stream.Collectors.*;
@@ -64,12 +72,12 @@ public class TestRepository {
                 .fetch();
 
         students.forEach(student -> System.out.println(student.getName()));
-        
+
         // 단일필드 그룹화
         Map<SchoolType, List<Student>> result = students.stream()
                 .collect(groupingBy(Student::getSchoolType));
         System.out.println(result);
-        
+
         // 다중필드 그룹화
         Map<SchoolType, Map<String, List<Student>>> result2 = students.stream()
                 .collect(groupingBy(Student::getSchoolType, groupingBy(Student::getName)));
@@ -94,5 +102,30 @@ public class TestRepository {
         Map<SchoolType, IntSummaryStatistics> result6 = students.stream()
                 .collect(groupingBy(Student::getSchoolType, summarizingInt(Student::getAge)));
         System.out.println(result6);
+    }
+
+    @Test
+    @Transactional
+    void test2(){
+        List<Student> students = jpaQueryFactory
+                .selectFrom(student)
+                .fetch();
+
+        List<StudentDto> studentDtos = students.stream()
+                .map(student -> StudentDto.builder(student).build())
+                .collect(Collectors.toList());
+
+        studentDtos.forEach(dto -> System.out.println(dto.getName()));
+    }
+
+    @Test
+    void test3() throws IOException {
+        BufferedReader br = Files.newBufferedReader(Paths.get("C:\\projects\\RestAPI-Template\\src\\test\\java\\com\\sisipapa\\template\\api\\repository\\result"));
+        Stream<String> lines = br.lines();
+//        lines.forEach(System.out::println);
+        Map<String, String> linesMap = lines.collect(Collectors.toMap(line -> line.split(" : ")[0], line -> line.split(" : ")[1]));
+        linesMap.keySet().forEach(System.out::println);
+
+//        lines.sorted().forEach(System.out::println);
     }
 }

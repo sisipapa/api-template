@@ -1,17 +1,19 @@
 package com.sisipapa.template.api.entity;
 
 import com.sisipapa.template.api.cenum.SchoolType;
-import lombok.Getter;
-import lombok.Setter;
+import com.sisipapa.template.api.dto.StudentDto;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
-
-
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity
+@Table(name="student")
+@Builder(builderMethodName = "StudentBuilder")
 public class Student {
 
     @Id
@@ -35,5 +37,14 @@ public class Student {
     // 즉, mappedBy를 갖고 있지 않은 엔티티가 주인이다.
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "student")
     private List<Score> students;
+
+    public static StudentBuilder builder(StudentDto student) {
+        return StudentBuilder()
+                .id(student.getId())
+                .name(student.getName())
+                .age(student.getAge())
+                .schoolType(student.getSchoolType())
+                .phoneNumber(student.getPhoneNumber());
+    }
 
 }
