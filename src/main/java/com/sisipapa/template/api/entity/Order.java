@@ -4,23 +4,19 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
+@Entity
 @Getter
 @Setter
-@Entity
-public class Score {
-
+@Table(name = "ORDERS")
+public class Order {
     @Id
+    @Column(name = "ORDER_ID", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "score_id")
     private Long id;
-
+    private LocalDateTime orderDate;
     @ManyToOne
-    @JoinColumn(name = "student_id")
-    private Student student;
-
-    @ManyToOne
-    @JoinColumn(name = "subject_id")
-    private Subject subject;
-
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
 }
