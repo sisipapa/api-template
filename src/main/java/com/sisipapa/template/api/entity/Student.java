@@ -36,7 +36,7 @@ public class Student {
     // mappedBy 속성으로 관계의 주인이 누구인지 알 수 있다. FK를 갖고 있는 갖고 있는 엔티티가 관계의 주인이 되는데, Post 엔티티가 주인이다.
     // 즉, mappedBy를 갖고 있지 않은 엔티티가 주인이다.
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "student")
-    private List<Score> students;
+    private List<Subject> subjects;
 
     public static StudentBuilder builder(StudentDto student) {
         return StudentBuilder()
@@ -44,7 +44,8 @@ public class Student {
                 .name(student.getName())
                 .age(student.getAge())
                 .schoolType(student.getSchoolType())
-                .phoneNumber(student.getPhoneNumber());
+                .phoneNumber(student.getPhoneNumber())
+                .scores(student.getScores());
     }
 
 }

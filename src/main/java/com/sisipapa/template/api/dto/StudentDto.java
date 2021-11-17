@@ -3,6 +3,7 @@ package com.sisipapa.template.api.dto;
 import com.sisipapa.template.api.cenum.SchoolType;
 import com.sisipapa.template.api.entity.Score;
 import com.sisipapa.template.api.entity.Student;
+import com.sisipapa.template.api.entity.Subject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class StudentDto {
     private Integer age;
     private SchoolType schoolType;
     private String phoneNumber;
-    private List<Score> students;
+    private List<Subject> subjects;
 
     public static StudentDtoBuilder builder(Student student) {
         return StudentDtoBuilder()
@@ -29,6 +30,7 @@ public class StudentDto {
                 .name(student.getName())
                 .age(student.getAge())
                 .schoolType(student.getSchoolType())
-                .phoneNumber(student.getPhoneNumber());
+                .phoneNumber(student.getPhoneNumber())
+                .subjects(student.getSubjects());
     }
 }
