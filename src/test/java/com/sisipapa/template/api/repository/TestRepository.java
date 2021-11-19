@@ -1,19 +1,16 @@
 package com.sisipapa.template.api.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sisipapa.template.api.entity.Comment;
-import com.sisipapa.template.api.entity.Member;
-import com.sisipapa.template.api.entity.Order;
-import com.sisipapa.template.api.entity.Post;
-import org.hibernate.Session;
+import com.sisipapa.template.api.entity.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 
 @SpringBootTest
 public class TestRepository {
@@ -23,6 +20,12 @@ public class TestRepository {
 
     @Autowired
     JPAQueryFactory jpaQueryFactory;
+
+    @Autowired
+    MemberRepository memberRepository;
+
+    @Autowired
+    LockerRepository lockerRepository;
 
     @Test
     @Transactional
@@ -72,5 +75,24 @@ public class TestRepository {
         }else{
             System.out.println("DELETED - CascadeType.ALL");
         }
+    }
+
+    @Test
+    @Transactional
+    void test3(){
+
+//        MemberL memberL = new MemberL();
+//        memberL.setUserName("userName1");
+//
+//        Locker locker = new Locker();
+//        locker.setName("name");
+//        memberL.setLocker(locker);
+//
+//        em.persist(memberL);
+
+        MemberL memberL = memberRepository.findById(1L).get();
+        System.out.println("=====================================================");
+        Locker locker = lockerRepository.findById(1L).get();
+        System.out.println("=====================================================");
     }
 }
